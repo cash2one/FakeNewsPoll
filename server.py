@@ -19,10 +19,10 @@ def initDb():
     url TEXT,
     urlToImage TEXT,
     publishedAt TEXT,
-    voteTrue INTEGER,
-    voteFalse INTEGER,
+    voteTrue INTEGER DEFAULT 0,
+    voteFalse INTEGER DEFAULT 0,
     UNIQUE (title)
-    )""")
+    );""")
     db.close()
 
 def getNews(source):
@@ -31,7 +31,7 @@ def getNews(source):
     newsData = json.loads(response.text)
     return newsData
 
-def loadNewsToDb(news):
+def setNewsToDb(news):
     db = sqlite3.connect("news.db")
     cursor = db.cursor()
     for article in news["articles"]:
@@ -39,12 +39,19 @@ def loadNewsToDb(news):
     db.commit()
     db.close()
 
+def loadNewsFromDb():
+    db = sqlite3.connect("news.db")
+    cursor = db.cursor()
+    data = []
+    for row in cursor.execute("SELECT * FROM news ORDER BY voteFalse"):
+        data.append({"title": row[1], "author": row[2], "description": row[3], "url": row[4], "urlToImage": row[5], "publishedAt": row[6]})
+    return data
+
 @app.route("/")
 def main():
-    return render_template('index.html', news=getNews("the-washington-post"))
+    return render_template('index.html', news=loadNewsFromDb())
 
 if __name__ == "__main__":
     initDb()
-    print(getNews("the-washington-post"))
-    loadNewsToDb(getNews("the-washington-post"))
+    setNewsToDb(getNews("the-washington-post"))
     app.run(debug=True, host="0.0.0.0")
