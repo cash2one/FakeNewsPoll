@@ -35,5 +35,5 @@ def main():
 
 if __name__ == "__main__":
     initDb()
-    getNews()
+    print(getNews())
     app.run(debug=True, host="0.0.0.0")
