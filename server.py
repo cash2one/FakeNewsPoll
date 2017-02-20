@@ -44,7 +44,7 @@ def loadNewsFromDb():
     cursor = db.cursor()
     data = []
     for row in cursor.execute("SELECT * FROM news ORDER BY voteFalse"):
-        data.append({"title": row[1], "author": row[2], "description": row[3], "url": row[4], "urlToImage": row[5], "publishedAt": row[6]})
+        data.append({"title": row[1], "author": row[2], "description": row[3], "url": row[4], "urlToImage": row[5], "publishedAt": row[6], "voteTrue": row[7], "voteFalse": row[8]})
     return data
 
 @app.route("/")
@@ -53,5 +53,5 @@ def main():
 
 if __name__ == "__main__":
     initDb()
-    setNewsToDb(getNews("the-washington-post"))
+    setNewsToDb(getNews("google-news"))
     app.run(debug=True, host="0.0.0.0")

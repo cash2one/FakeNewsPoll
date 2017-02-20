@@ -1,1 +1,22 @@
-<p>{{ news }}</p>
+{% for article in news %}
+  <div style="background-color:#d2d2d2">
+    <a href="{{ article.url }}">
+      <h3> {{ article.title }} </h3>
+    </a>
+    <img src="{{ article.urlToImage }}" style="height:300px"/>
+    <br />
+    <b> {{ article.author }} </b><i> {{ article.publishedAt }} </i>
+    <p> {{ article.description }} </p>
+    <br />
+    <div>
+      <h3 style="color: green; display: inline"> {{ article.voteTrue }} </h3>
+      <h3 style="display:inline"> - </h3>
+      <h3 style="color: red; display:inline"> {{ article.voteFalse }} </h3>
+    </div>
+  </div>
+  <br />
+{% endfor %}
+
+<a href="https://newsapi.org">
+  <p>Powered by NewsAPI.org</p>
+</a>
