@@ -6,6 +6,8 @@ import json
 
 app = Flask(__name__)
 
+votes = {}
+
 with open("config.json") as data_file:
     config = json.load(data_file)
 
@@ -53,10 +55,18 @@ def vote():
     db = sqlite3.connect("news.db")
     cursor = db.cursor()
 
+    id = request.json["id"]
     column = "vote" + request.json["opinion"]
-    
-    cursor.execute("UPDATE news SET " + column + " = " + column + " + 1 WHERE id = " + str(request.json["id"]))
-    db.commit()
+
+    ip = request.environ["REMOTE_ADDR"]
+    if not ip in votes:
+        votes[ip] = {}
+
+    if not id in votes[ip]:
+        votes[ip][id] = True
+        cursor.execute("UPDATE news SET " + column + " = " + column + " + 1 WHERE id = " + str(id))
+        db.commit()
+
     db.close()
     return "NULL"
 

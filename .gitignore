@@ -1,5 +1,6 @@
 # APP SPECIFIC IGNORES
 config.json
+votes.json
 news.db
 
 # Byte-compiled / optimized / DLL files
