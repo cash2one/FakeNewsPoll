@@ -9,9 +9,9 @@
     <p> {{ article.description }} </p>
     <br />
     <div>
-      <h3 style="color: green; display: inline"> {{ article.voteTrue }} </h3>
+      <h3 onClick="vote({{article.id}}, 'True')" id="voteTrue" style="color: green; display: inline"> {{ article.voteTrue }} </h3>
       <h3 style="display:inline"> - </h3>
-      <h3 style="color: red; display:inline"> {{ article.voteFalse }} </h3>
+      <h3 onClick="vote({{article.id}}, 'False')" id="voteFalse" style="color: red; display:inline"> {{ article.voteFalse }} </h3>
     </div>
   </div>
   <br />
@@ -20,3 +20,6 @@
 <a href="https://newsapi.org">
   <p>Powered by NewsAPI.org</p>
 </a>
+
+<script src="{{ url_for('static', filename='jquery-3.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
