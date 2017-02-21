@@ -61,11 +61,11 @@ def updateNews():
         setNewsToDb(getNews(source))
     print("Finished fetching news")
 
-def loadNewsFromDb():
+def loadNewsFromDb(amount):
     db = sqlite3.connect("news.db")
     cursor = db.cursor()
     data = []
-    for row in cursor.execute("SELECT * FROM news ORDER BY voteTrue + voteFalse DESC"):
+    for row in cursor.execute("SELECT * FROM news ORDER BY voteTrue + voteFalse DESC LIMIT " + str(amount)):
         data.append({"id": row[0], "title": row[1], "author": row[2], "description": row[3], "url": row[4], "urlToImage": row[5], "publishedAt": row[6], "voteTrue": row[7], "voteFalse": row[8]})
     db.close()
     return data
@@ -95,7 +95,7 @@ def vote():
 
 @app.route("/")
 def main():
-    return render_template('index.html', news=loadNewsFromDb())
+    return render_template('index.html', news=loadNewsFromDb(15))
 
 if __name__ == "__main__":
     initDb()
