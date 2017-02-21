@@ -1,17 +1,26 @@
+<head>
+  <title>Fake News Poll</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
 {% for article in news %}
-  <div style="background-color:#d2d2d2">
+  <div id ="article" style="background-color:#d2d2d2">
     <a href="{{ article.url }}">
       <h3> {{ article.title }} </h3>
     </a>
     <img src="{{ article.urlToImage }}" style="height:300px"/>
     <br />
-    <b> {{ article.author }} </b><i> {{ article.publishedAt }} </i>
+    <b> {{ article.author }} </b>
+    <br />
+    <i> {{ article.publishedAt }} </i>
     <p> {{ article.description }} </p>
     <br />
     <div>
-      <h3 onClick="vote({{article.id}}, 'True')" id="voteTrue" style="color: green; display: inline"> {{ article.voteTrue }} </h3>
+      <button onClick="vote({{article.id}}, 'True')">True</button>
+      <h3 id="voteTrue" style="color: green; display: inline"> {{ article.voteTrue }} </h3>
       <h3 style="display:inline"> - </h3>
-      <h3 onClick="vote({{article.id}}, 'False')" id="voteFalse" style="color: red; display:inline"> {{ article.voteFalse }} </h3>
+      <h3 id="voteFalse" style="color: red; display:inline"> {{ article.voteFalse }} </h3>
+      <button onClick="vote({{article.id}}, 'False')">False</button>
     </div>
   </div>
   <br />

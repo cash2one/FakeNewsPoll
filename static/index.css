@@ -1,0 +1,12 @@
+#article {
+  text-align: center;
+}
+
+#article a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h3 {
+  font-family: arial;
+}
