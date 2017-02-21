@@ -55,6 +55,12 @@ def setNewsToDb(news):
     db.commit()
     db.close()
 
+def updateNews():
+    print("Fetching news")
+    for source in config["SOURCES"]:
+        setNewsToDb(getNews(source))
+    print("Finished fetching news")
+
 def loadNewsFromDb():
     db = sqlite3.connect("news.db")
     cursor = db.cursor()
@@ -93,5 +99,5 @@ def main():
 
 if __name__ == "__main__":
     initDb()
-    setNewsToDb(getNews("google-news"))
+    updateNews()
     app.run(debug=True, host="0.0.0.0")

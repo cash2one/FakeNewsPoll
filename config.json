@@ -1,0 +1,13 @@
+{
+  "API_KEY": "NEWS_API_KEY",
+  "SOURCES": [
+    "independent",
+    "reuters",
+    "the-new-york-times",
+    "the-washington-post",
+    "the-wall-street-journal",
+    "bbc-news",
+    "cnn",
+    "cnbc"
+  ]
+}
