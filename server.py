@@ -25,6 +25,13 @@ def initDb():
     voteFalse INTEGER DEFAULT 0,
     UNIQUE (title)
     );""")
+
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS ip(
+    ip TEXT PRIMARY KEY
+    )
+    """)
+
     db.close()
 
 def getNews(source):
@@ -38,6 +45,13 @@ def setNewsToDb(news):
     cursor = db.cursor()
     for article in news["articles"]:
         cursor.execute("INSERT OR IGNORE INTO news (title, author, description, url, urlToImage, publishedAt) VALUES (?, ?, ?, ?, ?, ?)", [article["title"], article["author"], article["description"], article["url"], article["urlToImage"], article["publishedAt"]] )
+        #Get the id's of newly created entries
+        for row in cursor.execute("SELECT id FROM news WHERE url ='" + article["url"] + "'"):
+            try:
+                cursor.execute("ALTER TABLE ip ADD COLUMN n" + str(row[0]) + " INTEGER DEFAULT 0")
+            except sqlite3.OperationalError:
+                print("Column already exists")
+
     db.commit()
     db.close()
 
@@ -59,13 +73,16 @@ def vote():
     column = "vote" + request.json["opinion"]
 
     ip = request.environ["REMOTE_ADDR"]
-    if not ip in votes:
-        votes[ip] = {}
 
-    if not id in votes[ip]:
-        votes[ip][id] = True
+    cursor.execute("INSERT OR IGNORE INTO ip (ip) VALUES (?)", [ip])
+
+    cursor.execute("SELECT n" + str(id) + " FROM ip WHERE ip='" + ip + "'")
+    alreadyVoted = cursor.fetchone()[0]
+    if not alreadyVoted:
         cursor.execute("UPDATE news SET " + column + " = " + column + " + 1 WHERE id = " + str(id))
-        db.commit()
+        cursor.execute("UPDATE ip SET n" + str(id) + " = 1 WHERE ip = '" + ip + "'")
+
+    db.commit()
 
     db.close()
     return "NULL"
